@@ -14,3 +14,17 @@ a {
 * {
   box-sizing: border-box;
 }
+.col-md-4{
+  display: flex;
+  margin: 1rem 0;
+}
+.card{
+  margin: auto;
+  border-radius: 15px !important;
+}
+.card img{
+  border-radius: 15px 15px 0 0;
+}
+.row{
+      --bs-gutter-x: 0 !important;
+}
