@@ -1,23 +1,21 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import useSWR from "swr";
-import axios, { AxiosRequestConfig } from "axios";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 const Home: NextPage = () => {
   let data: any;
 
-  const [term, setTerm] = useState(" ");
+  const [term, setTerm] = useState("");
 
   const url = "https://imdb8.p.rapidapi.com/auto-complete";
 
-  const searchMovie = async () => {
+  const searchMovie = () => {
     data = useSWR([url, term], () =>
       axios({
         url: "https://imdb8.p.rapidapi.com/auto-complete",
@@ -34,20 +32,30 @@ const Home: NextPage = () => {
 
   let finData;
 
-  // useEffect(()=>{
   searchMovie();
-  // });
 
   if (data.data != null) {
     console.log(data.data);
     finData = data.data.d;
   }
 
+  const hitSearch = (e: any) => {
+    if (e.key === "Enter") {
+      searchMovie();
+    }
+  };
+
   return (
     <div>
       <nav>
         <h1>Movie App</h1>
-        <input type="text" onChange={(e)=> setTerm(e.target.value)} onKeyPress={}/>
+        <input
+          type="text"
+          value={term}
+          placeholder="Enter a movie or series name"
+          onChange={(e) => setTerm(e.target.value)}
+          onKeyPress={(e) => hitSearch(e)}
+        />
         <Row>
           {data.data != null &&
             finData.map((item: any, pos: any) => {
@@ -58,9 +66,13 @@ const Home: NextPage = () => {
                     <Card.Body>
                       <Card.Title>{item.l}</Card.Title>
                       <Row>
-                        <Col><Card.Text>{item.rank}</Card.Text></Col>
+                        <Col>
+                          <Card.Text>{item.rank}</Card.Text>
+                        </Col>
 
-                        <Col><Card.Text>{item.y}</Card.Text></Col>
+                        <Col>
+                          <Card.Text>{item.y}</Card.Text>
+                        </Col>
                       </Row>
                       <Button variant="primary">Go somewhere</Button>
                     </Card.Body>
