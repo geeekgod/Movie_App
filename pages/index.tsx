@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import useSWR from "swr";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -9,41 +9,52 @@ import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home: NextPage = () => {
-  let data: any;
+  const fetcher = (url: any, term: any) =>
+    axios.get(url, { params: { name: term } }).then((res) => res.data);
 
   const [term, setTerm] = useState("");
+  const [search, setSearch] = useState(false);
+  const [movies, setMovies] = useState([]);
 
-  const url = "https://imdb8.p.rapidapi.com/auto-complete";
-
-  const searchMovie = () => {
-    data = useSWR([url, term], () =>
-      axios({
-        url: "https://imdb8.p.rapidapi.com/auto-complete",
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "imdb8.p.rapidapi.com",
-          "x-rapidapi-key":
-            "c00e7820b4msh8ed6fb408512112p1269e6jsn01948f19398a",
-        },
-        params: { q: term },
-      }).then((res) => res.data)
-    );
-  };
-
-  let finData;
-
-  searchMovie();
-
-  if (data.data != null) {
-    console.log(data.data);
-    finData = data.data.d;
-  }
+  const { data, error, mutate } = useSWR(search ? "/api/movie" : null, () =>
+    fetcher("/api/movie", term)
+  );
 
   const hitSearch = (e: any) => {
     if (e.key === "Enter") {
-      searchMovie();
+      setSearch(true);
+      mutate();
     }
   };
+
+  // useEffect(() => {
+  //   if (search) {
+  //     setTimeout(() => {
+  //       setSearch(false);
+  //     }, 500);
+  //   }
+  // }, [search]);
+
+  useEffect(() => {
+    setSearch(true);
+    mutate();
+    setTimeout(() => {
+      setSearch(false);
+    }, 2000);
+  }, [term]);
+
+  useEffect(() => {
+    if (error) {
+      console.log("error", error);
+    }
+    if (data) {
+      console.log("data", data);
+      setMovies(data.movies);
+    }
+    if (data !== movies) {
+      setSearch(false);
+    }
+  }, [error, data, movies]);
 
   return (
     <div>
@@ -57,12 +68,12 @@ const Home: NextPage = () => {
           onKeyPress={(e) => hitSearch(e)}
         />
         <Row>
-          {data.data != null &&
-            finData.map((item: any, pos: any) => {
+          {movies[0] !== undefined &&
+            movies.map((item: any, pos: any) => {
               return (
                 <Col key={pos} md={4}>
                   <Card style={{ width: "18rem" }}>
-                    <Card.Img variant="top" src={item.i.imageUrl} />
+                    {item.i && <Card.Img variant="top" src={item.i.imageUrl} />}
                     <Card.Body>
                       <Card.Title>{item.l}</Card.Title>
                       <Row>
