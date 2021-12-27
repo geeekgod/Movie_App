@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import useSWR from "swr";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
@@ -9,52 +8,24 @@ import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home: NextPage = () => {
-  const fetcher = (url: any, term: any) =>
-    axios.get(url, { params: { name: term } }).then((res) => res.data);
-
   const [term, setTerm] = useState("");
-  const [search, setSearch] = useState(false);
   const [movies, setMovies] = useState([]);
 
-  const { data, error, mutate } = useSWR(search ? "/api/movie" : null, () =>
-    fetcher("/api/movie", term)
-  );
-
   const hitSearch = (e: any) => {
-    if (e.key === "Enter") {
-      setSearch(true);
-      mutate();
+    if (e.key === "Enter" && term.trim() !== "") {
+      // setSearch(true);
+      axios
+        .get("/api/movie", { params: { name: term } })
+        .then((res) => {
+          if (res.data.movies) {
+            setMovies(res.data.movies);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
-
-  // useEffect(() => {
-  //   if (search) {
-  //     setTimeout(() => {
-  //       setSearch(false);
-  //     }, 500);
-  //   }
-  // }, [search]);
-
-  useEffect(() => {
-    setSearch(true);
-    mutate();
-    setTimeout(() => {
-      setSearch(false);
-    }, 2000);
-  }, [term]);
-
-  useEffect(() => {
-    if (error) {
-      console.log("error", error);
-    }
-    if (data) {
-      console.log("data", data);
-      setMovies(data.movies);
-    }
-    if (data !== movies) {
-      setSearch(false);
-    }
-  }, [error, data, movies]);
 
   return (
     <div>
