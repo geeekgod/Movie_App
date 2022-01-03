@@ -7,13 +7,15 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
 import classes from "../styles/Home.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const Home: NextPage = () => {
   const [term, setTerm] = useState("");
   const [movies, setMovies] = useState([]);
 
-  const hitSearch = (e: any) => {
-    if (e.key === "Enter" && term.trim() !== "") {
+  const hitSearch = () => {
+    if (term.trim() !== "") {
       axios
         .get("/api/movie", { params: { name: term.toLowerCase() } })
         .then((res) => {
@@ -33,13 +35,19 @@ const Home: NextPage = () => {
       <nav>
         <div className={classes.headerContainer}>
           <h1>Movie App</h1>
-          <input
-            type="text"
-            value={term}
-            placeholder="Enter a movie or series name"
-            onChange={(e) => setTerm(e.target.value)}
-            onKeyPress={(e) => hitSearch(e)}
-          />
+          <div className={classes.searchBar}>
+            <input
+              type="text"
+              value={term}
+              placeholder="Enter a movie or series name"
+              onChange={(e) => setTerm(e.target.value)}
+              onKeyPress={(e) => {
+                e.key === "Enter" ? hitSearch() : null;
+              }}
+              onSubmit={hitSearch}
+            />
+            <FontAwesomeIcon icon={faSearch} color="grey" onClick={hitSearch} />
+          </div>
         </div>
       </nav>
       <Row>
@@ -47,22 +55,40 @@ const Home: NextPage = () => {
           movies.map((item: any, pos: any) => {
             return (
               <Col key={pos} md={4}>
-                <Card style={{ width: "18rem" }}>
-                  {item.i && <Card.Img variant="top" src={item.i.imageUrl} />}
-                  <Card.Body>
-                    <Card.Title>{item.l}</Card.Title>
+                <div
+                  style={{ width: "18rem" }}
+                  className={classes.cardContainer}
+                >
+                  {item.i && (
+                    <div
+                      style={{
+                        backgroundImage: `url(${item.i.imageUrl})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center center",
+                      }}
+                      className={classes.cardImage}
+                    ></div>
+                  )}
+                  <div className={classes.cardContentContainer}>
+                    <h4>{item.l}</h4>
                     <Row>
                       <Col>
-                        <Card.Text>{item.rank}</Card.Text>
+                        <p>{item.rank}</p>
                       </Col>
 
                       <Col>
-                        <Card.Text>{item.y}</Card.Text>
+                        <p>{item.y}</p>
                       </Col>
                     </Row>
-                    <Button variant="primary">Go somewhere</Button>
-                  </Card.Body>
-                </Card>
+                    <a
+                      target="_blank"
+                      // href={`https://www.google.com/search?q=${item.l}`}
+                      href={`https://www.imdb.com/find?q=${item.l}`}
+                    >
+                      <Button variant="primary">Read More</Button>
+                    </a>
+                  </div>
+                </div>
               </Col>
             );
           })}
