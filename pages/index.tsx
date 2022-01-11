@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "tailwindcss/tailwind.css";
+import { motion } from "framer-motion";
 
 const Home: NextPage = () => {
   const [term, setTerm] = useState("");
@@ -19,6 +20,7 @@ const Home: NextPage = () => {
         .get("/api/movie", { params: { name: term.toLowerCase() } })
         .then((res) => {
           if (res.data.movies) {
+            setMovies([]);
             setMovies(res.data.movies);
             setTerm("");
           }
@@ -55,7 +57,11 @@ const Home: NextPage = () => {
           movies.map((item: any, pos: any) => {
             return (
               <Col key={pos} md={4}>
-                <div
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 100 }}
                   style={{ width: "18rem" }}
                   className="w-4/12 m-auto overflow-hidden rounded-3xl bg-card-cont my-2"
                 >
@@ -88,7 +94,7 @@ const Home: NextPage = () => {
                       <Button variant="primary">Read More</Button>
                     </a>
                   </div>
-                </div>
+                </motion.div>
               </Col>
             );
           })}
