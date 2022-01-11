@@ -133,6 +133,7 @@ const Home: NextPage = () => {
                       className="my-1"
                       target="_blank"
                       href={`https://www.imdb.com/find?q=${item.l}`}
+                      rel="noreferrer"
                     >
                       <Button variant="primary">Read More</Button>
                     </a>
