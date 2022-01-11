@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -14,17 +18,17 @@ a {
 * {
   box-sizing: border-box;
 }
-.col-md-4{
+.col-md-4 {
   display: flex;
   margin: 1rem 0;
 }
-.card{
+.card {
   margin: auto;
   border-radius: 15px !important;
 }
-.card img{
+.card img {
   border-radius: 15px 15px 0 0;
 }
-.row{
-      --bs-gutter-x: 0 !important;
+.row {
+  --bs-gutter-x: 0 !important;
 }

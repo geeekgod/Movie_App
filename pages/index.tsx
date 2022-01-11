@@ -82,7 +82,6 @@ const Home: NextPage = () => {
                     </Row>
                     <a
                       target="_blank"
-                      // href={`https://www.google.com/search?q=${item.l}`}
                       href={`https://www.imdb.com/find?q=${item.l}`}
                     >
                       <Button variant="primary">Read More</Button>
