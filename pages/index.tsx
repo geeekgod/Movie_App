@@ -1,14 +1,13 @@
 import type { NextPage } from "next";
 import axios from "axios";
 import React, { useState } from "react";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.min.css";
-import classes from "../styles/Home.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import "tailwindcss/tailwind.css";
 
 const Home: NextPage = () => {
   const [term, setTerm] = useState("");
@@ -31,12 +30,13 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className={classes.container}>
+    <div className="min-h-screen bg-back-g">
       <nav>
-        <div className={classes.headerContainer}>
-          <h1>Movie App</h1>
-          <div className={classes.searchBar}>
+        <div className="flex justify-between items-center my-0 mx-3 px-3 py-8">
+          <h1 className="text-4xl text-white">Movie App</h1>
+          <div className="flex h-10 bg-search-bar items-center p-2 w-64 justify-evenly rounded-3xl ">
             <input
+              className="bg-transparent border-none outline-none"
               type="text"
               value={term}
               placeholder="Enter a movie or series name"
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
               <Col key={pos} md={4}>
                 <div
                   style={{ width: "18rem" }}
-                  className={classes.cardContainer}
+                  className="w-4/12 m-auto overflow-hidden rounded-3xl bg-card-cont my-2"
                 >
                   {item.i && (
                     <div
@@ -66,12 +66,12 @@ const Home: NextPage = () => {
                         backgroundSize: "cover",
                         backgroundPosition: "center center",
                       }}
-                      className={classes.cardImage}
+                      className="w-full h-96"
                     ></div>
                   )}
-                  <div className={classes.cardContentContainer}>
-                    <h4>{item.l}</h4>
-                    <Row>
+                  <div className="py-6 px-6 text-white">
+                    <h4 className="my-1">{item.l}</h4>
+                    <Row className="my-1">
                       <Col>
                         <p>{item.rank}</p>
                       </Col>
@@ -81,6 +81,7 @@ const Home: NextPage = () => {
                       </Col>
                     </Row>
                     <a
+                      className="my-1"
                       target="_blank"
                       href={`https://www.imdb.com/find?q=${item.l}`}
                     >
