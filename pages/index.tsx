@@ -34,16 +34,16 @@ const Home: NextPage = () => {
   return (
     <div className="min-h-screen bg-back-g overflow-hidden">
       <nav>
-        <div className="flex justify-between items-center my-0 mx-3 px-3">
+        <div className="flex flex-col md:flex-row justify-between items-center my-0 mx-3 px-3">
           <motion.div
-            className="flex items-center py-8 cursor-pointer"
+            className="flex items-center py-8 cursor-pointer flex-col xs:flex-row"
             whileHover={{
               y: [0, -20, 20, -20, 0],
               transition: { duration: 1 },
             }}
           >
             <motion.svg
-              initial={{ rotate: -270 }}
+              initial={{ rotate: 270 }}
               animate={{ rotate: 0, transition: { duration: 0.6 } }}
               className="w-12 mr-4 text-white"
               fill="none"
@@ -88,61 +88,64 @@ const Home: NextPage = () => {
           </motion.div>
         </div>
       </nav>
-      <Row>
-        {movies[0] !== undefined &&
-          movies.map((item: any, pos: any) => {
-            return (
-              <Col key={pos} md={4}>
-                <motion.div
-                  drag
-                  dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-                  dragElastic={0.1}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{
-                    opacity: 1,
-                    scale: 1,
-                    transition: { duration: 0.5 },
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 100 }}
-                  style={{ width: "18rem" }}
-                  className="w-4/12 m-auto overflow-hidden rounded-3xl bg-card-cont my-2 cursor-pointer shadow-lg hover:shadow-xl"
-                >
-                  {item.i && (
-                    <div
-                      style={{
-                        backgroundImage: `url(${item.i.imageUrl})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center center",
-                      }}
-                      className="w-full h-96"
-                    ></div>
-                  )}
-                  <div className="py-6 px-6 text-white">
-                    <h4 className="my-1">{item.l}</h4>
-                    <Row className="my-1">
-                      <Col>
-                        <p>{item.rank}</p>
-                      </Col>
+      <div className="mt-5">
+        {" "}
+        <Row>
+          {movies[0] !== undefined &&
+            movies.map((item: any, pos: any) => {
+              return (
+                <Col key={pos} md={4}>
+                  <motion.div
+                    drag
+                    dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                    dragElastic={0.1}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      transition: { duration: 0.5 },
+                    }}
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ type: "spring", stiffness: 100 }}
+                    style={{ width: "18rem" }}
+                    className="w-4/12 m-auto overflow-hidden rounded-3xl bg-card-cont my-2 cursor-pointer shadow-lg hover:shadow-xl"
+                  >
+                    {item.i && (
+                      <div
+                        style={{
+                          backgroundImage: `url(${item.i.imageUrl})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center center",
+                        }}
+                        className="w-full h-96"
+                      ></div>
+                    )}
+                    <div className="py-6 px-6 text-white">
+                      <h4 className="my-1">{item.l}</h4>
+                      <Row className="my-1">
+                        <Col>
+                          <p>{item.rank}</p>
+                        </Col>
 
-                      <Col>
-                        <p>{item.y}</p>
-                      </Col>
-                    </Row>
-                    <a
-                      className="my-1"
-                      target="_blank"
-                      href={`https://www.imdb.com/find?q=${item.l}`}
-                      rel="noreferrer"
-                    >
-                      <Button variant="primary">Read More</Button>
-                    </a>
-                  </div>
-                </motion.div>
-              </Col>
-            );
-          })}
-      </Row>
+                        <Col>
+                          <p>{item.y}</p>
+                        </Col>
+                      </Row>
+                      <a
+                        className="my-1"
+                        target="_blank"
+                        href={`https://www.imdb.com/find?q=${item.l}`}
+                        rel="noreferrer"
+                      >
+                        <button className="green-btn ">Read More</button>
+                      </a>
+                    </div>
+                  </motion.div>
+                </Col>
+              );
+            })}
+        </Row>
+      </div>
     </div>
   );
 };

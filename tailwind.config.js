@@ -10,6 +10,9 @@ module.exports = {
         "search-bar": "rgba(255, 255, 255, 0.7)",
         "card-cont": "#073a4b",
       },
+      screens: {
+        xs: "440px",
+      },
     },
   },
   plugins: [],

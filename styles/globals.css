@@ -13,6 +13,7 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  text-emphasis: none;
 }
 
 * {
@@ -31,4 +32,10 @@ a {
 }
 .row {
   --bs-gutter-x: 0 !important;
+}
+
+@layer components {
+  .green-btn {
+    @apply rounded-full bg-lime-600 py-2 px-4 my-1 border-2 border-lime-600 transition ease-out duration-500 hover:text-lime-600 hover:bg-transparent;
+  }
 }
